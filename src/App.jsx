@@ -3,26 +3,6 @@ import ButtonItem from "./components/ButtonItem";
 
 function App() {
   const [display, setDisplay] = useState(0);
-  function handleClick(e) {
-    if (e.target.tagName === "BUTTON") {
-      const pressedBtn = e.target.value;
-      display === 0 ? setDisplay(pressedBtn) : setDisplay(display + pressedBtn);
-
-      switch (pressedBtn) {
-        case "=":
-          setDisplay(eval(display).toString());
-          break;
-        case "AC":
-          setDisplay(0);
-          break;
-        case "C":
-          setDisplay(display.slice(0, display.length - 1));
-          break;
-        default:
-          break;
-      }
-    }
-  }
   const botones = [
     "7",
     "8",
@@ -42,6 +22,35 @@ function App() {
     "*",
     "=",
   ];
+  const operadores = ["/", "*", "-", "+", "C", "AC", "="];
+
+  function handleClick(e) {
+    if (e.target.tagName !== "BUTTON") return;
+
+    const lastValue = display[display.length - 1];
+    const pressedBtn = e.target.value;
+    if (display === 0 && operadores.includes(pressedBtn)) {
+      return;
+    }
+    if (operadores.includes(pressedBtn) && operadores.includes(lastValue))
+      return;
+    
+    display === 0 ? setDisplay(pressedBtn) : setDisplay(display + pressedBtn);
+
+    switch (pressedBtn) {
+      case "=":
+        setDisplay(eval(display).toString());
+        break;
+      case "AC":
+        setDisplay(0);
+        break;
+      case "C":
+        setDisplay(display.slice(0, display.length - 1) || 0);
+        break;
+      default:
+        break;
+    }
+  }
 
   return (
     <>
